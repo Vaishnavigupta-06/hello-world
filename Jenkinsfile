@@ -1,20 +1,23 @@
-pipeline{
-    agent {
-        agent any
-    }
-    environment {
-        PATH = "/opt/maven/bin:$PATH"
+pipeline {
+    agent any
+    tools {
+        maven "MAVEN"
+        jdk "JDK"
     }
     stages {
-        stage('build') {
+        stage('Initialize'){
             steps{
-                echo "------------ build started ---------"
-                sh 'mvn clean install -Dmaven.test.skip=true'
-                echo "------------ build completed ---------"
-        }
-      }
-    
-       
+                echo "PATH = ${M2_HOME}/bin:${PATH}"
+                echo "M2_HOME = /opt/maven"
             }
         }
-    
+        stage('Build') {
+            steps {
+                
+                sh 'mvn -B -DskipTests clean package'
+                
+            }
+        }
+     }
+  
+}
